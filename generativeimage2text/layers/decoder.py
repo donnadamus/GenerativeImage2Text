@@ -829,8 +829,8 @@ class CaptioningModel(nn.Module):
         self.pooling_images = pooling_images
 
         if num_image_with_embedding:
-            logging.info('creating temperal embedding')
-            self.img_temperal_embedding = nn.ParameterList(
+            logging.info('creating temporal embedding')
+            self.img_temporal_embedding = nn.ParameterList(
                 nn.Parameter(torch.zeros(1, 1, self.textual.visual_feature_size)) for _ in range(num_image_with_embedding)
             )
         self.num_image_with_embedding = num_image_with_embedding
@@ -846,7 +846,7 @@ class CaptioningModel(nn.Module):
             if isinstance(batch['image'], (list, tuple)):
                 features = [self.image_encoder(im) for im in batch['image']]
                 if self.num_image_with_embedding:
-                    features = [f + e for f, e in zip(features, self.img_temperal_embedding)]
+                    features = [f + e for f, e in zip(features, self.img_temporal_embedding)]
                 if self.pooling_images is None:
                     visual_features = torch.cat(features, dim=1)
                 elif self.pooling_images == 'avg':
